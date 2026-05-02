@@ -1,0 +1,74 @@
+# grok-imagine skill — example configuration
+#
+# Copy this file to ~/.grok-imagine.env and edit. The skill loads it
+# automatically if present.
+#
+# Lines starting with # are ignored. Quoted values have quotes stripped.
+
+# ---------------------------------------------------------------------------
+# REQUIRED
+# ---------------------------------------------------------------------------
+
+# Your xAI API key. Get it from https://console.x.ai
+XAI_API_KEY=xai-PASTE-YOUR-KEY-HERE
+
+# ---------------------------------------------------------------------------
+# IMAGE DEFAULTS (overridable per call via CLI flags)
+# ---------------------------------------------------------------------------
+
+# Default image model. Options:
+#   grok-imagine-image      $0.02/image, 8000-char prompt limit
+#   grok-imagine-image-pro  $0.07/image, 10000-char prompt limit, higher fidelity
+GROK_IMG_MODEL=grok-imagine-image
+
+# Default resolution. Options: 1k, 2k
+GROK_IMG_RESOLUTION=1k
+
+# Default aspect ratio. Options:
+#   1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3,
+#   1:2, 2:1, 9:19.5, 19.5:9, 9:20, 20:9, auto
+GROK_IMG_ASPECT_RATIO=auto
+
+# Default response format. Options: url, b64_json
+GROK_IMG_RESPONSE_FORMAT=url
+
+# Default number of images per request. Range: 1-10
+GROK_IMG_N=1
+
+# ---------------------------------------------------------------------------
+# VIDEO DEFAULTS (overridable per call via CLI flags)
+# ---------------------------------------------------------------------------
+
+# Default video model. (Only one model exists as of May 2026.)
+GROK_VID_MODEL=grok-imagine-video
+
+# Default resolution. Options:
+#   480p  $0.05/sec, faster, good for iteration
+#   720p  $0.07/sec, production quality
+GROK_VID_RESOLUTION=720p
+
+# Default duration in seconds per clip. Range: 1-15
+GROK_VID_DURATION=8
+
+# Default aspect ratio for video. Options: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3
+GROK_VID_ASPECT_RATIO=16:9
+
+# Polling interval (seconds between status checks)
+GROK_VID_POLL_INTERVAL=5
+
+# Maximum seconds to wait for a video before timing out
+GROK_VID_POLL_TIMEOUT=600
+
+# ---------------------------------------------------------------------------
+# OUTPUT PATHS
+# ---------------------------------------------------------------------------
+
+# Where finished assets are staged. Each call gets a timestamped subdirectory.
+GROK_OUTPUT_ROOT=$HOME/grok-imagine-output
+
+# Intermediate ffmpeg work. Must be readable by snap-ffmpeg if you're using
+# the snap version (snap-ffmpeg cannot read /mnt/claude-workspace).
+GROK_STAGING=$HOME/tmp/grok-imagine-staging
+
+# Per-call cost log. Format: ISO8601 | op | model | params | ticks | $usd | request_id
+GROK_COST_LOG=$HOME/log/grok-imagine-cost.log

@@ -1,0 +1,10 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Local config
+.env
+.grok-imagine.env
+
+# Test artifacts
+/tmp/grok-imagine-tests/
