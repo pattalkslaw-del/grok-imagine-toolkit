@@ -1,6 +1,17 @@
 ---
 name: grok-imagine
-description: Generate or edit images and videos via the xAI Grok Imagine API. Covers text-to-image, image edits (single + multi-reference + mask), text-to-video, image-to-video, reference-to-video, video edits, and video extends. Includes hyperframe chaining for video longer than 15 seconds, four documented patterns for character consistency across cuts, and graphic fall-back compositing for text-heavy images. Use whenever a caller needs to actually produce assets via Grok Imagine. Pair with shot-list authoring tools and property-specific style skills as appropriate. Triggers: Grok Imagine, grok-imagine-image, grok-imagine-video, xAI image, xAI video, character consistency, image-to-video, video extend, hyperframe, multi-clip video, video stitching, generate image with Grok, generate video with Grok.
+description: >-
+  Generate or edit images and videos via the xAI Grok Imagine API. Covers
+  text-to-image, image edits (single + multi-reference + mask), text-to-video,
+  image-to-video, reference-to-video, video edits, and video extends. Includes
+  hyperframe chaining for video longer than 15 seconds, four documented
+  patterns for character consistency across cuts, and graphic fall-back
+  compositing for text-heavy images. Use whenever a caller needs to actually
+  produce assets via Grok Imagine. Pair with shot-list authoring tools and
+  property-specific style skills as appropriate. Triggers include Grok
+  Imagine, grok-imagine-image, grok-imagine-video, xAI image, xAI video,
+  character consistency, image-to-video, video extend, hyperframe, multi-clip
+  video, video stitching, generate image with Grok, generate video with Grok.
 ---
 
 # Grok Imagine API
@@ -305,14 +316,16 @@ For full details with reproducible test cases, see `references/known-quirks.md`.
 
 ## Pairing with other skills
 
+This toolkit bundles its own authoring layer at `prompts/SKILL.md`. Load that skill when the user wants a shot list; load this skill when the user wants execution.
+
 | Need | Pair with |
 |------|-----------|
-| Author shot lists / structured video prompts | a structured video-prompt authoring tool |
+| Author shot lists / structured video prompts | `prompts/SKILL.md` (bundled in this repo) |
 | Text-heavy image composites (HTML overlay) | this skill's graphic fall-back + headless Chromium (Puppeteer or Playwright) |
 | Long-form video assembly with non-Imagine sources | [Remotion](https://remotion.dev) or another programmatic video framework |
-| Branded constraints across many videos | a property-specific style skill of your own |
+| Branded constraints across many videos | a property-specific style skill that wraps `prompts/SKILL.md` with locked character vocabulary |
 
-The recommended pattern: brand/property constraints → structured shot list → `grok-imagine` (execute, stitch, deliver). Voice and copy work happens in parallel.
+The recommended pattern: brand/property constraints, then structured shot list (`prompts/`), then this skill executes, stitches, and delivers. Voice and copy work happens in parallel.
 
 ---
 

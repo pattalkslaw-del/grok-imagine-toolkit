@@ -1,5 +1,10 @@
 # grok-imagine
 
+[![CI](https://github.com/pattalkslaw-del/grok-imagine-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/pattalkslaw-del/grok-imagine-toolkit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![xAI Grok Imagine](https://img.shields.io/badge/xAI-Grok%20Imagine-black.svg)](https://docs.x.ai/developers/model-capabilities/images/generation)
+
 Skill for the xAI Grok Imagine API — image and video generation, editing, extending, and multi-clip orchestration.
 
 This README is for **end users** of the skill (humans configuring it for their own use). For Claude's operational guide to the skill, read `SKILL.md`. For deep API reference, read the files in `references/`.
@@ -147,21 +152,30 @@ Reconcile against your xAI Console billing page monthly. If anything disagrees b
 - `references/graphic-fallback-patterns.md` — when to use HTML+Chromium instead of fighting the model
 - `references/known-quirks.md` — every gotcha discovered in live testing, with workarounds
 
-## Pairing with other skills
+## Two layers, one repo
 
-The skill is the **execution layer**. Author shot lists, voice/tone, branded constraints, and post-production elsewhere:
+The toolkit ships with both layers needed to go from idea to rendered video:
 
-| Need | Skill |
-|------|-------|
-| Author shot lists / structured video prompts | a structured video-prompt authoring tool of your choice |
-| Voice and tone for accompanying copy | your own writing-voice tooling |
-| Long-form video assembly (Remotion, multi-source) | `remotion` |
+| Layer | Lives in | What it does |
+|---|---|---|
+| **Authoring** | `prompts/SKILL.md` | Turns a scene description into a structured shot list with effects, density map, and energy arc. Loaded as a skill by Claude or used as a prompt template by any LLM. |
+| **Execution** | `scripts/`, `references/`, `examples/` | Calls the xAI API, polls, downloads, stitches, logs costs. Generates images and video from a prompt or shot list. |
 
-Typical pipeline:
-1. Property skill defines constraints (aspect ratios, mood, brand rules)
-2. A structured video-prompt builder produces the shot list
-3. This skill executes (image gen, video gen, stitching, manifest)
-4. Property skill or human reviews
+The two layers are decoupled on purpose. You can use the authoring layer alone (paste output into any Grok Imagine call), or use the execution layer alone (drive it from your own prompt source). The handoff is plain text: a shot list goes into `scripts/generate_video.py` or `scripts/hyperframe.py`.
+
+```
+your brief  ->  prompts/SKILL.md (shot list)  ->  scripts/generate_video.py  ->  rendered clip + cost log
+```
+
+For brand/character constraints across many videos, build a small property skill that wraps `prompts/SKILL.md` with locked character vocabulary and do-not-do lists, then hands the constrained brief to the authoring layer. That part is intentionally outside this repo because it's specific to your creative property.
+
+## Pairing with other tools
+
+| Need | Pair with |
+|---|---|
+| Long-form video assembly with non-Imagine sources (stock, screen recordings, voiceover) | [Remotion](https://remotion.dev) |
+| Text-heavy image composites the model handles poorly | Headless Chromium (Puppeteer or Playwright) plus `references/graphic-fallback-patterns.md` |
+| Brand voice for accompanying copy, captions, and metadata | Your own writing-voice tooling, kept separate so you can change models for one without touching the other |
 
 ## Troubleshooting
 
